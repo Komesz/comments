@@ -35,6 +35,12 @@ class CommentsController extends Controller
         $comment->comment = $request->message;
         $comment->save();
 
+        if($request->ajax()) {
+            return [
+                'comments' => view('vendor.comments.components.comments', ['model' => $comment->commentable_type::find($comment->commentable_id)])->__toString()
+            ];
+        }
+
         return redirect()->to(url()->previous() . '#comment-' . $comment->id);
     }
 
@@ -53,6 +59,13 @@ class CommentsController extends Controller
             'comment' => $request->message
         ]);
 
+
+        if($request->ajax()) {
+            return [
+                'comments' => view('vendor.comments.components.comments', ['model' => $comment->commentable_type::find($comment->commentable_id)])->__toString()
+            ];
+        }
+
         return redirect()->to(url()->previous() . '#comment-' . $comment->id);
     }
 
@@ -64,6 +77,12 @@ class CommentsController extends Controller
         $this->authorize('delete-comment', $comment);
 
         $comment->delete();
+
+        if($request->ajax()) {
+            return [
+                'comments' => view('vendor.comments.components.comments', ['model' => $comment->commentable_type::find($comment->commentable_id)])->__toString()
+            ];
+        }
 
         return redirect()->back();
     }
@@ -85,6 +104,13 @@ class CommentsController extends Controller
         $reply->parent()->associate($comment);
         $reply->comment = $request->message;
         $reply->save();
+
+
+        if($request->ajax()) {
+            return [
+                'comments' => view('vendor.comments.components.comments', ['model' => $comment->commentable_type::find($comment->commentable_id)])->__toString()
+            ];
+        }
 
         return redirect()->to(url()->previous() . '#comment-' . $reply->id);
     }
